@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BES Cyber System Assessment EGAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #061b78;
+            --deep-blue: #031052;
+            --royal-blue: #12229d;
+            --gold: #ffc928;
+            --gold-soft: #fff3c4;
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --border: #d8e0ec;
+            --text: #172033;
+            --muted: #667085;
+            --danger: #d90429;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 10% 8%, rgba(255, 201, 40, 0.18), transparent 28%),
+                radial-gradient(circle at 88% 12%, rgba(6, 27, 120, 0.13), transparent 32%),
+                linear-gradient(180deg, #f8faff 0%, #eef3f8 100%);
+            font-family: "Inter", "Noto Sans Thai", sans-serif;
+            color: var(--text);
+        }
+
+        .egat-header {
+            background: #ffffff;
+            border-bottom: 5px solid var(--gold);
+            box-shadow: 0 8px 28px rgba(6, 27, 120, 0.16);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .egat-header-inner {
+            max-width: 1420px;
+            margin: 0 auto;
+            padding: 16px 42px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
+
+        .egat-brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .egat-logo {
+            height: 62px;
+            width: auto;
+            display: block;
+        }
+
+        .egat-divider {
+            width: 1px;
+            height: 48px;
+            background: #d8e0ec;
+        }
+
+        .egat-title h3 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--primary-blue);
+            letter-spacing: -0.3px;
+        }
+
+        .egat-title span {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .egat-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .egat-nav-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 800;
+            padding: 10px 14px;
+            border-radius: 999px;
+            transition: 0.2s ease;
+        }
+
+        .egat-nav-link:hover,
+        .egat-nav-link.active {
+            background: var(--gold-soft);
+            color: var(--primary-blue);
+        }
+
+        .egat-logout {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary-blue), var(--royal-blue));
+            text-decoration: none;
+            font-weight: 800;
+            padding: 10px 18px;
+            border-radius: 999px;
+            box-shadow: 0 8px 18px rgba(6, 27, 120, 0.2);
+        }
+
+        .egat-logout:hover {
+            color: #ffffff;
+            background: linear-gradient(135deg, #071f8c, #182fc7);
+        }
+
+        .main-container {
+            max-width: 1320px;
+            margin: 34px auto;
+            padding: 0 24px;
+        }
+
+        .hero-strip {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, #fff9e7 42%, #ffffff 100%);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            padding: 30px 34px;
+            box-shadow: 0 20px 54px rgba(15,23,42,0.09);
+            margin-bottom: 24px;
+        }
+
+        .hero-strip::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: var(--gold);
+            border-radius: 38px;
+            transform: rotate(18deg);
+            right: -110px;
+            top: -150px;
+            opacity: 0.9;
+        }
+
+        .hero-strip::after {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 420px;
+            background: var(--primary-blue);
+            border-radius: 38px;
+            transform: rotate(13deg);
+            right: 70px;
+            top: -120px;
+            opacity: 0.94;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 760px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: rgba(255,201,40,0.32);
+            color: var(--primary-blue);
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            padding: 7px 12px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+        }
+
+        .hero-content h4 {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
+        .hero-content p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: rgba(255,255,255,0.94);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 20px 22px;
+            box-shadow: 0 14px 38px rgba(15,23,42,0.07);
+        }
+
+        .summary-label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            margin-top: 8px;
+            color: var(--primary-blue);
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 20px 54px rgba(15,23,42,0.09);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .panel-header {
+            padding: 24px 30px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            position: relative;
+        }
+
+        .panel-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 7px;
+            background: linear-gradient(180deg, var(--gold), var(--primary-blue));
+        }
+
+        .panel-header h5 {
+            margin: 0;
+            color: var(--primary-blue);
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .panel-header small {
+            color: var(--muted);
+        }
+
+        .panel-body {
+            padding: 28px 30px;
+        }
+
+        .section-title {
+            color: #344054;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 9px;
+        }
+
+        .form-select {
+            border-radius: 16px;
+            padding: 13px 15px;
+            border: 1px solid #cfd8e6;
+            font-weight: 600;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(6, 27, 120, 0.12);
+        }
+
+        .status-box {
+            background: linear-gradient(135deg, #f8fbff, #fff9e7);
+            border: 1px solid #e2e8f0;
+            border-left: 6px solid var(--gold);
+            border-radius: 18px;
+            padding: 16px 18px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .status-box strong {
+            color: var(--primary-blue);
+        }
+
+        .evaluator-box {
+            background: linear-gradient(135deg, #ffffff, #f8fbff);
+            padding: 24px;
+            border-radius: 22px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .evaluator-box::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 7px;
+            background: linear-gradient(180deg, var(--gold), var(--primary-blue));
+        }
+
+        .evaluator-title {
+            margin: 0 0 18px 0;
+            color: var(--primary-blue);
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .fancy-label {
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 7px;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .fancy-input {
+            border-radius: 14px;
+            padding: 13px 15px;
+            border: 1px solid #cfd8e6;
+            font-weight: 600;
+            transition: 0.2s ease;
+            background: #ffffff;
+        }
+
+        .fancy-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(6, 27, 120, 0.12);
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .error-text {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 7px;
+            display: none;
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 18px;
+            border: 1px solid #dbe3ef;
+            box-shadow: 0 12px 32px rgba(15,23,42,0.06);
+        }
+
+        table {
+            margin-bottom: 0 !important;
+            background: white;
+        }
+
+        thead th {
+            background: linear-gradient(180deg, var(--primary-blue), var(--deep-blue)) !important;
+            color: white !important;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 17px 12px !important;
+            border-color: rgba(255,255,255,0.18) !important;
+        }
+
+        thead th small {
+            color: #fceaa0;
+            font-weight: 700;
+        }
+
+        tbody td {
+            vertical-align: middle;
+            font-size: 14px;
+            padding: 15px 14px !important;
+            border-color: #e1e8f0 !important;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9fbff;
+        }
+
+        tbody tr:hover {
+            background: #fff7db;
+        }
+
+        .col-no {
+            width: 72px;
+            text-align: center;
+            color: var(--primary-blue);
+            font-weight: 900;
+        }
+
+        .col-system {
+            font-weight: 600;
+        }
+
+        .col-check {
+            width: 210px;
+            text-align: center;
+        }
+
+        .col-room {
+            width: 240px;
+            color: #12229d;
+            font-weight: 700;
+        }
+
+        .custom-check {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            border: 2px solid #b7c3d0;
+            border-radius: 7px;
+        }
+
+        .custom-check:checked {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .btn-official {
+            background: linear-gradient(135deg, var(--primary-blue), var(--royal-blue));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 13px 30px;
+            font-weight: 900;
+            box-shadow: 0 14px 28px rgba(6,27,120,0.22);
+        }
+
+        .btn-official:hover {
+            background: linear-gradient(135deg, #071f8c, #182fc7);
+            color: white;
+        }
+
+        .save-section {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #e5eaf2;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .notice {
+            background: #fff9e7;
+            border: 1px solid #f2d47b;
+            border-left: 6px solid var(--gold);
+            color: #6b4b00;
+            border-radius: 18px;
+            padding: 18px 22px;
+            font-weight: 700;
+        }
+
+        .footer-note {
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+            padding: 18px 0 28px;
+        }
+
+        @media (max-width: 950px) {
+            .egat-header-inner {
+                padding: 14px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .egat-logo {
+                height: 52px;
+            }
+
+            .egat-divider {
+                display: none;
+            }
+
+            .egat-title h3 {
+                font-size: 18px;
+            }
+
+            .egat-nav {
+                flex-wrap: wrap;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-strip::before,
+            .hero-strip::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="egat-header">
+    <div class="egat-header-inner">
+        <div class="egat-brand">
+            <img src="https://energysolutions.egat.co.th/images/SES-Photos/100-Home/105-Logo/EGAT-01.png"
+                 alt="EGAT Logo"
+                 class="egat-logo">
+
+            <div class="egat-divider"></div>
+
+            <div class="egat-title">
+                <h3>Electricity Generating Authority of Thailand</h3>
+                <span>Cybersecurity Compliance Data Entry System</span>
+            </div>
+        </div>
+
+        <nav class="egat-nav">
+            <a href="/form" class="egat-nav-link active">Home</a>
+            <a href="/export" class="egat-nav-link">Export CSV</a>
+            <a href="/logout" class="egat-logout">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main-container">
+
+    <section class="hero-strip">
+        <div class="hero-content">
+            <div class="eyebrow">Official Assessment Platform by EGAT</div>
+            <h4>BES Cyber System Data Collection</h4>
+            <p>
+                Select a department, review the list of critical cyber systems,
+                and mark systems classified as BES Cyber Systems.
+            </p>
+        </div>
+    </section>
+
+    <section class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">System Module</div>
+            <div class="summary-value">BES Checklist</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Current User</div>
+            <div class="summary-value">{{ session.username }}</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Access Role</div>
+            <div class="summary-value">{{ role }}</div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h5>Assessment Control Panel</h5>
+            <small>Select a department to begin or continue the assessment.</small>
+        </div>
+
+        <div class="panel-body">
+            <div class="row g-4 align-items-end">
+                <div class="col-md-6">
+                    <div class="section-title">Department</div>
+
+                    <form method="GET" action="/form">
+                        <select name="unit_id" class="form-select" onchange="this.form.submit()">
+                            <option value="">-- Please Select Department --</option>
+
+                            {% for unit in units %}
+                                <option value="{{ unit.id }}"
+                                    {% if selected_unit_id and selected_unit_id|int == unit.id %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ unit.unit_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="status-box">
+                        <strong>Authentication Status:</strong> Verified User<br>
+                        <strong>Permission Level:</strong> {{ role }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if selected_unit_id %}
+
+    <form method="POST" id="assessmentForm">
+        <input type="hidden" name="unit_id" value="{{ selected_unit_id }}">
+
+        <div class="evaluator-box">
+            <h5 class="evaluator-title">Assessment Information</h5>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="fancy-label">
+                        Evaluator Name <span class="required">*</span>
+                    </label>
+
+                    <input type="text"
+                           id="evaluator_name"
+                           name="evaluator_name"
+                           class="form-control fancy-input"
+                           placeholder="Enter evaluator name"
+                           value="{{ evaluator_name }}">
+
+                    <div id="evaluator-error" class="error-text">
+                        ⚠ Please enter evaluator name before saving.
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fancy-label">
+                        Assessment Date <span class="required">*</span>
+                    </label>
+
+                    <input type="date"
+                           id="assessment_date"
+                           name="assessment_date"
+                           class="form-control fancy-input"
+                           value="{{ assessment_date }}">
+
+                    <div id="date-error" class="error-text">
+                        ⚠ Please select assessment date before saving.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h5>Cyber System Checklist</h5>
+                <small>Please mark each system that is classified as a BES Cyber System.</small>
+            </div>
+
+            <div class="panel-body">
+                <div class="table-wrapper">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Cyber System Name</th>
+                                <th>BES Cyber System<br><small>Yes / No</small></th>
+                                <th>Room No.</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for system in systems %}
+                            <tr>
+                                <td class="col-no">{{ system.system_no }}</td>
+
+                                <td class="col-system">
+                                    {{ system.cyber_system_name }}
+                                </td>
+
+                                <td class="col-check">
+                                    <input type="checkbox"
+                                           class="form-check-input custom-check"
+                                           name="bes_{{ system.id }}"
+                                           {% if records.get(system.id) %}
+                                           checked
+                                           {% endif %}>
+                                </td>
+
+                                <td class="col-room">
+                                    {{ system.room_no }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="save-section">
+                    <button type="submit" class="btn btn-official">
+                        Save Assessment
+                    </button>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    {% else %}
+
+    <div class="notice">
+        Please select a department before entering BES Cyber System assessment information.
+    </div>
+
+    {% endif %}
+
+    <div class="footer-note">
+        Electricity Generating Authority of Thailand · Authorized Use Only
+    </div>
+
+</main>
+
+<script>
+    const assessmentForm = document.getElementById("assessmentForm");
+
+    if (assessmentForm) {
+        assessmentForm.addEventListener("submit", function(e) {
+            const evaluatorInput = document.getElementById("evaluator_name");
+            const dateInput = document.getElementById("assessment_date");
+
+            const evaluatorError = document.getElementById("evaluator-error");
+            const dateError = document.getElementById("date-error");
+
+            const evaluator = evaluatorInput.value.trim();
+            const assessmentDate = dateInput.value;
+
+            let hasError = false;
+
+            if (!evaluator) {
+                evaluatorError.style.display = "block";
+                evaluatorInput.classList.add("is-invalid");
+                hasError = true;
+            } else {
+                evaluatorError.style.display = "none";
+                evaluatorInput.classList.remove("is-invalid");
+            }
+
+            if (!assessmentDate) {
+                dateError.style.display = "block";
+                dateInput.classList.add("is-invalid");
+                hasError = true;
+            } else {
+                dateError.style.display = "none";
+                dateInput.classList.remove("is-invalid");
+            }
+
+            if (hasError) {
+                e.preventDefault();
+
+                const target = !evaluator ? evaluatorInput : dateInput;
+                target.focus();
+
+                window.scrollTo({
+                    top: target.getBoundingClientRect().top + window.scrollY - 140,
+                    behavior: "smooth"
+                });
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
