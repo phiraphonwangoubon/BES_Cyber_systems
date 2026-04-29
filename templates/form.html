@@ -530,7 +530,7 @@
 
             <div class="egat-title">
                 <h3>Electricity Generating Authority of Thailand</h3>
-                <span>Cybersecurity Compliance Data Entry System</span>
+                <span>	มาตรฐานความมั่นคงปลอดภัยระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า กฟผ.</span>
             </div>
         </div>
 
@@ -546,11 +546,10 @@
 
     <section class="hero-strip">
         <div class="hero-content">
-            <div class="eyebrow">Official Assessment Platform by EGAT</div>
-            <h4>BES Cyber System Data Collection</h4>
+            <div class="eyebrow">WN-CIP-002</div>
+            <h4>การจำแนกประเภทระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า</h4>
             <p>
-                Select a department, review the list of critical cyber systems,
-                and mark systems classified as BES Cyber Systems.
+                เลือกแผนก ตรวจสอบรายชื่อระบบไซเบอร์ที่สำคัญ และทำเครื่องหมายระบบที่จัดอยู่ในประเภทระบบไซเบอร์ BES
             </p>
         </div>
     </section>
@@ -558,7 +557,7 @@
     <section class="summary-grid">
         <div class="summary-card">
             <div class="summary-label">System Module</div>
-            <div class="summary-value">BES Checklist</div>
+            <div class="summary-value">Identify BES Cyber System</div>
         </div>
 
         <div class="summary-card">
@@ -575,17 +574,17 @@
     <section class="panel">
         <div class="panel-header">
             <h5>Assessment Control Panel</h5>
-            <small>Select a department to begin or continue the assessment.</small>
+            <small>เลือกสถานที่ทำการเพื่อเริ่มต้นดำเนินการประเมินผล</small>
         </div>
 
         <div class="panel-body">
             <div class="row g-4 align-items-end">
                 <div class="col-md-6">
-                    <div class="section-title">Department</div>
+                    <div class="section-title">สถานที่ทำการ</div>
 
                     <form method="GET" action="/form">
                         <select name="unit_id" class="form-select" onchange="this.form.submit()">
-                            <option value="">-- Please Select Department --</option>
+                            <option value="">-- เลือกสถานที่ --</option>
 
                             {% for unit in units %}
                                 <option value="{{ unit.id }}"
@@ -621,7 +620,7 @@
             <div class="row g-4">
                 <div class="col-md-6">
                     <label class="fancy-label">
-                        Evaluator Name <span class="required">*</span>
+                        ผู้ประเมิน <span class="required">*</span>
                     </label>
 
                     <input type="text"
@@ -638,7 +637,7 @@
 
                 <div class="col-md-6">
                     <label class="fancy-label">
-                        Assessment Date <span class="required">*</span>
+                        วันที่ <span class="required">*</span>
                     </label>
 
                     <input type="date"
@@ -657,7 +656,7 @@
         <section class="panel">
             <div class="panel-header">
                 <h5>Cyber System Checklist</h5>
-                <small>Please mark each system that is classified as a BES Cyber System.</small>
+                <small>โปรดทำเครื่องหมายที่ระบบแต่ละระบบที่จัดอยู่ในประเภทระบบไซเบอร์ BES</small>
             </div>
 
             <div class="panel-body">
@@ -719,6 +718,7 @@
     <div class="footer-note">
         Electricity Generating Authority of Thailand · Authorized Use Only
     </div>
+    
 
 </main>
 
