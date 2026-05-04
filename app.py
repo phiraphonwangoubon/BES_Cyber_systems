@@ -724,12 +724,13 @@ def approve_f05_decision(unit_id):
     if not approval_evaluator_name:
         return "Please enter approval evaluator name."
 
-    conn = get_db()
+    conn = get_db_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
+    # 1) เช็คก่อนว่าเอกสารยัง pending อยู่ไหม
     cur.execute("""
-        SELECT id
-        FROM f05_records
+        SELECT approval_status
+        FROM f05_documents
         WHERE unit_id = %s
     """, (unit_id,))
     record = cur.fetchone()
@@ -739,58 +740,67 @@ def approve_f05_decision(unit_id):
         conn.close()
         return "F05 document not found."
 
+    if record["approval_status"] != "pending":
+        cur.close()
+        conn.close()
+        return "This F05 document has already been reviewed."
+
+    action = "approve" if decision == "approved" else "reject"
+
+    # 2) อัปเดตสถานะเอกสาร
     cur.execute("""
-        UPDATE f05_records
+        UPDATE f05_documents
         SET
             approval_status = %s,
-            approved_by = %s,
-            approved_at = CURRENT_TIMESTAMP,
             approval_comment = %s,
-            approval_evaluator_name = %s
+            approval_evaluator_name = %s,
+            approved_by = %s,
+            approved_at = NOW(),
+            updated_at = NOW()
         WHERE unit_id = %s
     """, (
         decision,
-        session["user_id"],
         approval_comment,
         approval_evaluator_name,
+        session["user_id"],
         unit_id
     ))
 
-    history_action = "approve" if decision == "approved" else "reject"
-
+    # 3) บันทึก history
     cur.execute("""
-        INSERT INTO f05_history
-        (
-            f05_id,
-            action,
-            status,
+        INSERT INTO f05_history (
+            unit_id,
             user_id,
             username,
-            comment
+            action,
+            status,
+            comment,
+            evaluator_name,
+            created_at
         )
-        VALUES (%s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
     """, (
-        record["id"],
-        history_action,
-        decision,
+        unit_id,
         session["user_id"],
-        session["username"],
-        approval_comment
+        session.get("username"),
+        action,
+        decision,
+        approval_comment,
+        approval_evaluator_name
     ))
+
+    # 4) audit log
+    write_audit_log(
+        action=f"F05_{decision.upper()}",
+        unit_id=unit_id,
+        new_value=f"decision={decision}, evaluator={approval_evaluator_name}"
+    )
 
     conn.commit()
     cur.close()
     conn.close()
 
-    write_audit_log(
-        action="APPROVE_F05_RECORD" if decision == "approved" else "REJECT_F05_RECORD",
-        unit_id=unit_id,
-        old_value=None,
-        new_value=decision,
-        evaluator_name=approval_evaluator_name
-    )
-
-    return redirect("/approver")
+    return redirect(f"/approver/f05/{unit_id}")
 
 
 @app.route("/export")

@@ -527,35 +527,61 @@ body{
         </div>
 
         <div class="panel-body">
-            <form method="POST" action="/approver/f05/{{ record.unit_id }}/decision">
 
-                <label class="form-label">
-                    ชื่อผู้ประเมิน <span class="text-danger">*</span>
-                </label>
-                <input type="text"
-                       name="approval_evaluator_name"
-                       class="form-control mb-3"
-                       required
-                       placeholder="กรอกชื่อผู้ประเมิน"
-                       value="{{ record.approval_evaluator_name or '' }}">
+    {% if record.approval_status == "pending" %}
 
-                <label class="form-label">หมายเหตุจากผู้อนุมัติ</label>
-                <textarea name="approval_comment"
-                          class="form-control mb-3"
-                          rows="4"
-                          placeholder="กรอกหมายเหตุ เช่น ผ่านการตรวจสอบแล้ว / ต้องแก้ไขข้อมูลเพิ่มเติม">{{ record.approval_comment or '' }}</textarea>
+    <form method="POST"
+          action="/approver/f05/{{ record.unit_id }}/decision"
+          onsubmit="this.querySelectorAll('button').forEach(b=>b.disabled=true)">
 
-                <div class="d-flex gap-2 justify-content-end flex-wrap">
-                    <button type="submit" name="decision" value="rejected" class="btn btn-reject">
-                        ไม่ผ่านการอนุมัติ
-                    </button>
+        <label class="form-label">
+            ชื่อผู้ประเมิน <span class="text-danger">*</span>
+        </label>
 
-                    <button type="submit" name="decision" value="approved" class="btn btn-approve">
-                        ผ่านการอนุมัติ
-                    </button>
-                </div>
-            </form>
+        <input type="text"
+               name="approval_evaluator_name"
+               class="form-control mb-3"
+               required
+               placeholder="กรอกชื่อผู้ประเมิน"
+               value="{{ record.approval_evaluator_name or '' }}">
+
+        <label class="form-label">หมายเหตุจากผู้อนุมัติ</label>
+
+        <textarea name="approval_comment"
+                  class="form-control mb-3"
+                  rows="4"
+                  placeholder="กรอกหมายเหตุ เช่น ผ่านการตรวจสอบแล้ว / ต้องแก้ไขข้อมูลเพิ่มเติม">{{ record.approval_comment or '' }}</textarea>
+
+        <div class="d-flex gap-2 justify-content-end flex-wrap">
+
+            <button type="submit"
+                    name="decision"
+                    value="rejected"
+                    class="btn btn-reject"
+                    onclick="return confirm('ยืนยันการไม่อนุมัติเอกสารนี้ใช่หรือไม่?')">
+                ไม่ผ่านการอนุมัติ
+            </button>
+
+            <button type="submit"
+                    name="decision"
+                    value="approved"
+                    class="btn btn-approve"
+                    onclick="return confirm('ยืนยันการอนุมัติเอกสารนี้ใช่หรือไม่?')">
+                ผ่านการอนุมัติ
+            </button>
+
         </div>
+    </form>
+
+    {% else %}
+
+    <div class="alert alert-info mb-0">
+        เอกสารนี้ถูกดำเนินการแล้ว ไม่สามารถอนุมัติหรือแก้ไขซ้ำได้
+    </div>
+
+    {% endif %}
+
+</div>
     </section>
 
     <section class="panel">
@@ -569,11 +595,12 @@ body{
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th style="width:20%;">เวลา</th>
-                            <th style="width:20%;">ผู้ใช้</th>
-                            <th style="width:20%;">Action</th>
-                            <th style="width:20%;">Status</th>
-                            <th style="width:20%;">Comment</th>
+                            <th>เวลา</th>
+                            <th>ผู้ใช้</th>
+                            <th>ผู้ประเมิน</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Comment</th>
                         </tr>
                     </thead>
 
@@ -582,6 +609,7 @@ body{
                         <tr>
                             <td>{{ h.created_at_th or h.created_at }}</td>
                             <td>{{ h.username or '-' }}</td>
+                            <td>{{ h.evaluator_name or '-' }}</td>
                             <td>
                                 {% if h.action == "submit" %}
                                     ส่งเอกสาร
