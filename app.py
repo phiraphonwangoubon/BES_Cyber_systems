@@ -115,6 +115,21 @@ def write_audit_log(
     conn.close()
 
 
+def format_thai_datetime(dt):
+    if not dt:
+        return None
+
+    thai_tz = pytz.timezone("Asia/Bangkok")
+
+    if dt.tzinfo is None:
+        dt = pytz.utc.localize(dt)
+
+    thai_time = dt.astimezone(thai_tz)
+    thai_year = thai_time.year + 543
+
+    return thai_time.strftime(f"%d/%m/{thai_year} %H:%M:%S")
+
+
 @app.route("/")
 def index():
     if "user_id" not in session:
@@ -151,8 +166,8 @@ def login():
 
             if user["role"] == "approver":
                 return redirect("/approver")
-            else:
-                return redirect("/form")
+
+            return redirect("/form")
 
         write_audit_log(
             action="LOGIN_FAILED",
@@ -175,10 +190,8 @@ def logout():
 
 @app.route("/form", methods=["GET", "POST"])
 def form():
-
     if session.get("role") == "approver":
         return redirect("/approver")
-
 
     if "user_id" not in session:
         return redirect("/login")
@@ -332,10 +345,8 @@ def form():
 
 @app.route("/f05", methods=["GET", "POST"])
 def f05():
-
     if session.get("role") == "approver":
         return redirect("/approver")
-
 
     if "user_id" not in session:
         return redirect("/login")
@@ -525,25 +536,9 @@ def f05():
             WHERE unit_id = %s
         """, (selected_unit_id,))
         record = cur.fetchone()
-        
-        import pytz
-
-        thai_tz = pytz.timezone("Asia/Bangkok")
 
         if record and record["approved_at"]:
-                utc_time = record["approved_at"]
-
-                if utc_time.tzinfo is None:
-                    utc_time = pytz.utc.localize(utc_time)
-
-                thai_time = utc_time.astimezone(thai_tz)
-
-                thai_year = thai_time.year + 543
-
-                record["approved_at_th"] = thai_time.strftime(
-    f"%d/%m/{thai_year} %H:%M:%S"
-)
-        
+            record["approved_at_th"] = format_thai_datetime(record["approved_at"])
 
     cur.close()
     conn.close()
@@ -606,38 +601,12 @@ def approver():
 
     records = cur.fetchall()
 
-    import pytz
-
-    thai_tz = pytz.timezone("Asia/Bangkok")
-
     for r in records:
-        # approved_at
         if r["approved_at"]:
-            utc_time = r["approved_at"]
+            r["approved_at_th"] = format_thai_datetime(r["approved_at"])
 
-            if utc_time.tzinfo is None:
-                utc_time = pytz.utc.localize(utc_time)
-
-            thai_time = utc_time.astimezone(thai_tz)
-            thai_year = thai_time.year + 543
-
-            r["approved_at_th"] = thai_time.strftime(
-                f"%d/%m/{thai_year} %H:%M:%S"
-            )
-
-        # updated_at
         if r["updated_at"]:
-            utc_time = r["updated_at"]
-
-            if utc_time.tzinfo is None:
-                utc_time = pytz.utc.localize(utc_time)
-
-            thai_time = utc_time.astimezone(thai_tz)
-            thai_year = thai_time.year + 543
-
-            r["updated_at_th"] = thai_time.strftime(
-                f"%d/%m/{thai_year} %H:%M:%S"
-            )
+            r["updated_at_th"] = format_thai_datetime(r["updated_at"])
 
     cur.close()
     conn.close()
@@ -682,6 +651,9 @@ def approver_f05_detail(unit_id):
         conn.close()
         return "F05 document not found."
 
+    if record["approved_at"]:
+        record["approved_at_th"] = format_thai_datetime(record["approved_at"])
+
     cur.execute("""
         SELECT *
         FROM f05_history
@@ -689,6 +661,10 @@ def approver_f05_detail(unit_id):
         ORDER BY created_at DESC
     """, (record["id"],))
     history = cur.fetchall()
+
+    for h in history:
+        if h["created_at"]:
+            h["created_at_th"] = format_thai_datetime(h["created_at"])
 
     cur.close()
     conn.close()
@@ -724,83 +700,90 @@ def approve_f05_decision(unit_id):
     if not approval_evaluator_name:
         return "Please enter approval evaluator name."
 
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    conn = None
+    cur = None
 
-    # 1) เช็คก่อนว่าเอกสารยัง pending อยู่ไหม
-    cur.execute("""
-        SELECT approval_status
-        FROM f05_documents
-        WHERE unit_id = %s
-    """, (unit_id,))
-    record = cur.fetchone()
+    try:
+        conn = get_db()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-    if not record:
-        cur.close()
-        conn.close()
-        return "F05 document not found."
+        cur.execute("""
+            SELECT id, approval_status
+            FROM f05_records
+            WHERE unit_id = %s
+        """, (unit_id,))
+        record = cur.fetchone()
 
-    if record["approval_status"] != "pending":
-        cur.close()
-        conn.close()
-        return "This F05 document has already been reviewed."
+        if not record:
+            return "F05 document not found."
 
-    action = "approve" if decision == "approved" else "reject"
+        if record["approval_status"] != "pending":
+            return "This F05 document has already been reviewed."
 
-    # 2) อัปเดตสถานะเอกสาร
-    cur.execute("""
-        UPDATE f05_documents
-        SET
-            approval_status = %s,
-            approval_comment = %s,
-            approval_evaluator_name = %s,
-            approved_by = %s,
-            approved_at = NOW(),
-            updated_at = NOW()
-        WHERE unit_id = %s
-    """, (
-        decision,
-        approval_comment,
-        approval_evaluator_name,
-        session["user_id"],
-        unit_id
-    ))
+        action = "approve" if decision == "approved" else "reject"
 
-    # 3) บันทึก history
-    cur.execute("""
-        INSERT INTO f05_history (
-            unit_id,
-            user_id,
-            username,
+        cur.execute("""
+            UPDATE f05_records
+            SET
+                approval_status = %s,
+                approval_comment = %s,
+                approval_evaluator_name = %s,
+                approved_by = %s,
+                approved_at = NOW(),
+                updated_at = NOW()
+            WHERE unit_id = %s
+        """, (
+            decision,
+            approval_comment,
+            approval_evaluator_name,
+            session["user_id"],
+            unit_id
+        ))
+
+        cur.execute("""
+            INSERT INTO f05_history
+            (
+                f05_id,
+                action,
+                status,
+                user_id,
+                username,
+                comment,
+                evaluator_name,
+                created_at
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
+        """, (
+            record["id"],
             action,
-            status,
-            comment,
-            evaluator_name,
-            created_at
+            decision,
+            session["user_id"],
+            session["username"],
+            approval_comment,
+            approval_evaluator_name
+        ))
+
+        write_audit_log(
+            action=f"F05_{decision.upper()}",
+            unit_id=unit_id,
+            new_value=f"decision={decision}, evaluator={approval_evaluator_name}",
+            evaluator_name=approval_evaluator_name
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
-    """, (
-        unit_id,
-        session["user_id"],
-        session.get("username"),
-        action,
-        decision,
-        approval_comment,
-        approval_evaluator_name
-    ))
 
-    # 4) audit log
-    write_audit_log(
-        action=f"F05_{decision.upper()}",
-        unit_id=unit_id,
-        new_value=f"decision={decision}, evaluator={approval_evaluator_name}"
-    )
+        conn.commit()
 
-    conn.commit()
-    cur.close()
-    conn.close()
+        return redirect(f"/approver/f05/{unit_id}")
 
-    return redirect(f"/approver/f05/{unit_id}")
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        return f"ERROR: {str(e)}"
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
 
 
 @app.route("/export")
@@ -855,8 +838,6 @@ def export_csv():
     cur.close()
     conn.close()
 
-    thai_tz = pytz.timezone("Asia/Bangkok")
-
     output = io.StringIO()
     writer = csv.writer(output)
 
@@ -872,17 +853,7 @@ def export_csv():
     ])
 
     for row in rows:
-        updated_at = row["updated_at"]
-
-        if updated_at:
-            if updated_at.tzinfo is None:
-                updated_at = pytz.utc.localize(updated_at)
-
-            thai_time = updated_at.astimezone(thai_tz)
-            thai_year = thai_time.year + 543
-            formatted_time = thai_time.strftime(f"%d/%m/{thai_year} %H:%M:%S")
-        else:
-            formatted_time = ""
+        formatted_time = format_thai_datetime(row["updated_at"]) if row["updated_at"] else ""
 
         writer.writerow([
             row["unit_name"],
@@ -903,6 +874,8 @@ def export_csv():
         as_attachment=True,
         download_name="bes_cyber_system_export.csv"
     )
+
+
 @app.route("/f05/report/<int:unit_id>")
 def f05_report(unit_id):
     if "user_id" not in session:
@@ -933,26 +906,15 @@ def f05_report(unit_id):
     if not record:
         return "F05 report not found."
 
-    thai_tz = pytz.timezone("Asia/Bangkok")
-
     if record["approved_at"]:
-        utc_time = record["approved_at"]
-
-        if utc_time.tzinfo is None:
-            utc_time = pytz.utc.localize(utc_time)
-
-        thai_time = utc_time.astimezone(thai_tz)
-        thai_year = thai_time.year + 543
-
-        record["approved_at_th"] = thai_time.strftime(
-            f"%d/%m/{thai_year} %H:%M:%S"
-        )
+        record["approved_at_th"] = format_thai_datetime(record["approved_at"])
 
     return render_template(
         "f05_report.html",
         record=record,
         session=session
     )
+
 
 @app.route("/f03/report/<int:unit_id>")
 def f03_report(unit_id):
@@ -1010,7 +972,7 @@ def f03_report(unit_id):
         session=session
     )
 
+
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
