@@ -1,6 +1,6 @@
 Flask
 psycopg2-binary
+gunicorn
 python-dotenv
 Werkzeug
-gunicorn
 pytz

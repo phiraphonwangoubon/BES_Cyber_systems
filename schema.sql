@@ -45,3 +45,41 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     user_agent TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS f05_records (
+    id SERIAL PRIMARY KEY,
+    unit_id INTEGER NOT NULL REFERENCES units(id),
+
+    applicability BOOLEAN DEFAULT FALSE,
+    asset_consideration BOOLEAN DEFAULT FALSE,
+    bes_identification BOOLEAN DEFAULT FALSE,
+    asset_identification BOOLEAN DEFAULT FALSE,
+
+    form_old_1 TEXT,
+    form_new_1 TEXT,
+    form_old_2 TEXT,
+    form_new_2 TEXT,
+    form_old_3 TEXT,
+    form_new_3 TEXT,
+    form_old_4 TEXT,
+    form_new_4 TEXT,
+
+    improvement_detail TEXT,
+    operator_name TEXT,
+    assessment_date DATE,
+
+    updated_by INTEGER REFERENCES users(id),
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE(unit_id)
+);
+ALTER TABLE f05_records
+ADD COLUMN IF NOT EXISTS approval_status TEXT DEFAULT 'pending';
+
+ALTER TABLE f05_records
+ADD COLUMN IF NOT EXISTS approved_by INTEGER REFERENCES users(id);
+
+ALTER TABLE f05_records
+ADD COLUMN IF NOT EXISTS approved_at TIMESTAMP;
+
+ALTER TABLE f05_records
+ADD COLUMN IF NOT EXISTS approval_comment TEXT;

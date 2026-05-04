@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>F05 Approved Report</title>
+
+<style>
+@page {
+    size: A4;
+    margin: 18mm 16mm;
+}
+
+body {
+    font-family: "TH Sarabun New", "Noto Sans Thai", Arial, sans-serif;
+    color: #111;
+    margin: 0;
+    font-size: 16px;
+}
+
+.print-btn {
+    margin: 20px;
+    padding: 10px 18px;
+    border: none;
+    background: #061b78;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.page {
+    max-width: 210mm;
+    margin: auto;
+    padding: 20px 28px;
+    border: 1.5px solid #222;
+    position: relative;
+}
+
+.doc-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid #061b78;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.logo {
+    width: 95px;
+    margin-right: 18px;
+}
+
+.header-text h2 {
+    margin: 0;
+    color: #061b78;
+    font-size: 24px;
+}
+
+.header-text p {
+    margin: 3px 0 0;
+    font-size: 15px;
+}
+
+.doc-code {
+    margin-left: auto;
+    text-align: right;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.title {
+    text-align: center;
+    margin: 18px 0;
+}
+
+.title h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.title p {
+    margin: 4px 0 0;
+    font-weight: bold;
+}
+
+.approved-stamp {
+    text-align: center;
+    border: 2px solid #198754;
+    color: #198754;
+    padding: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 15px auto;
+    width: 260px;
+    border-radius: 6px;
+}
+
+.rejected-stamp {
+    text-align: center;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    padding: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 15px auto;
+    width: 260px;
+    border-radius: 6px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 22px;
+    margin-bottom: 16px;
+}
+
+.info-box {
+    border: 1px solid #999;
+    padding: 8px 10px;
+    min-height: 28px;
+}
+
+.section-title {
+    background: #061b78;
+    color: white;
+    padding: 7px 10px;
+    font-weight: bold;
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 7px;
+    vertical-align: middle;
+}
+
+th {
+    background: #f1f3f8;
+    text-align: center;
+    font-weight: bold;
+}
+
+.center {
+    text-align: center;
+}
+
+.detail-box {
+    border: 1px solid #333;
+    min-height: 85px;
+    padding: 10px;
+    line-height: 1.7;
+}
+
+.sign-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    margin-top: 38px;
+}
+
+.sign-box {
+    text-align: center;
+    min-height: 150px;
+}
+
+.sign-line {
+    margin-top: 42px;
+    border-bottom: 1px solid #111;
+    height: 20px;
+}
+
+.footer {
+    margin-top: 18px;
+    border-top: 1px solid #999;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.watermark {
+    position: absolute;
+    top: 390px;
+    left: 80px;
+    transform: rotate(-25deg);
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(25, 135, 84, 0.08);
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+}
+
+@media print {
+    .print-btn {
+        display: none;
+    }
+
+    .page {
+        border: 1.5px solid #222;
+        box-shadow: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+
+<div class="page">
+
+    {% if record.approval_status == "approved" %}
+        <div class="watermark">APPROVED</div>
+    {% elif record.approval_status == "rejected" %}
+        <div class="watermark" style="color: rgba(220,53,69,0.08);">REJECTED</div>
+    {% endif %}
+
+    <div class="content">
+
+        <div class="doc-header">
+            <img class="logo"
+                 src="https://energysolutions.egat.co.th/images/SES-Photos/100-Home/105-Logo/EGAT-01.png">
+
+            <div class="header-text">
+                <h2>Electricity Generating Authority of Thailand</h2>
+                <p>มาตรฐานความมั่นคงปลอดภัยระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า กฟผ.</p>
+            </div>
+
+            <div class="doc-code">
+                <b>รหัสแบบฟอร์ม</b><br>
+                WN-CIP-002-F05<br>
+                Rev. 0
+            </div>
+        </div>
+
+        <div class="title">
+            <h1>แบบฟอร์มทบทวนการระบุสินทรัพย์</h1>
+            <p>Review the Identifications of Assets</p>
+        </div>
+
+        {% if record.approval_status == "approved" %}
+            <div class="approved-stamp">ผ่านการอนุมัติแล้ว</div>
+        {% elif record.approval_status == "rejected" %}
+            <div class="rejected-stamp">ไม่ผ่านการอนุมัติ</div>
+        {% else %}
+            <div class="approved-stamp" style="border-color:#ffc928;color:#8a6500;">
+                รอการอนุมัติ
+            </div>
+        {% endif %}
+
+        <div class="info-grid">
+            <div class="info-box"><b>ชื่อหน่วยงาน:</b> {{ record.unit_name }}</div>
+            <div class="info-box"><b>เลขที่เอกสาร:</b> F05-{{ record.unit_id }}</div>
+
+            <div class="info-box"><b>ผู้ปฏิบัติงาน:</b> {{ record.operator_name or '-' }}</div>
+            <div class="info-box"><b>วันที่ประเมิน:</b> {{ record.assessment_date or '-' }}</div>
+
+            <div class="info-box"><b>ผู้อนุมัติ / รับทราบ:</b> {{ record.approval_evaluator_name or '-' }}</div>
+            <div class="info-box"><b>เวลาที่อนุมัติ:</b> {{ record.approved_at_th or record.approved_at or '-' }}</div>
+        </div>
+
+        <div class="section-title">1. การทบทวนการระบุสินทรัพย์</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:38%;">หัวข้อ</th>
+                    <th style="width:17%;">แบบฟอร์ม</th>
+                    <th style="width:13%;">ปรับปรุง</th>
+                    <th style="width:16%;">เลขที่เดิม</th>
+                    <th style="width:16%;">เลขที่ใหม่</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>1. การระบุการบังคับใช้ (Applicability)</td>
+                    <td class="center">CIP-002-F01</td>
+                    <td class="center">{{ "Yes" if record.applicability else "No" }}</td>
+                    <td class="center">{{ record.form_old_1 or '-' }}</td>
+                    <td class="center">{{ record.form_new_1 or '-' }}</td>
+                </tr>
+
+                <tr>
+                    <td>2. การพิจารณา Assets แต่ละกลุ่ม</td>
+                    <td class="center">CIP-002-F02</td>
+                    <td class="center">{{ "Yes" if record.asset_consideration else "No" }}</td>
+                    <td class="center">{{ record.form_old_2 or '-' }}</td>
+                    <td class="center">{{ record.form_new_2 or '-' }}</td>
+                </tr>
+
+                <tr>
+                    <td>3. การระบุระบบที่เป็น BES Cyber System</td>
+                    <td class="center">CIP-002-F03</td>
+                    <td class="center">{{ "Yes" if record.bes_identification else "No" }}</td>
+                    <td class="center">{{ record.form_old_3 or '-' }}</td>
+                    <td class="center">{{ record.form_new_3 or '-' }}</td>
+                </tr>
+
+                <tr>
+                    <td>4. การระบุสินทรัพย์ (Asset Identify)</td>
+                    <td class="center">CIP-002-F04</td>
+                    <td class="center">{{ "Yes" if record.asset_identification else "No" }}</td>
+                    <td class="center">{{ record.form_old_4 or '-' }}</td>
+                    <td class="center">{{ record.form_new_4 or '-' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-title">2. รายละเอียดการปรับปรุง</div>
+        <div class="detail-box">
+            {{ record.improvement_detail or '-' }}
+        </div>
+
+        <div class="section-title">3. ผลการพิจารณาอนุมัติ</div>
+        <div class="detail-box" style="min-height:55px;">
+            <b>สถานะ:</b>
+            {% if record.approval_status == "approved" %}
+                ผ่านการอนุมัติ
+            {% elif record.approval_status == "rejected" %}
+                ไม่ผ่านการอนุมัติ
+            {% else %}
+                รอการอนุมัติ
+            {% endif %}
+            <br>
+            <b>หมายเหตุ:</b> {{ record.approval_comment or '-' }}
+        </div>
+
+        <div class="sign-grid">
+            <div class="sign-box">
+                <b>ผู้ปฏิบัติงาน</b>
+                <div class="sign-line"></div>
+                <p>({{ record.operator_name or '-' }})</p>
+                <p>วันที่ {{ record.assessment_date or '-' }}</p>
+            </div>
+
+            <div class="sign-box">
+                <b>ผู้อนุมัติ / รับทราบ</b>
+                <div class="sign-line"></div>
+                <p>({{ record.approval_evaluator_name or '-' }})</p>
+                <p>วันที่ {{ record.approved_at_th or '-' }}</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>WN-CIP-002-F05</span>
+            <span>Generated by EGAT BES Cyber System Assessment Platform</span>
+            <span>หน้า 1 / 1</span>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

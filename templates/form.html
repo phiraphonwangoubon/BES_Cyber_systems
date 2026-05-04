@@ -481,6 +481,40 @@
             font-size: 12px;
             padding: 18px 0 28px;
         }
+        .export-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+}
+
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 24px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background: linear-gradient(135deg, #198754, #0f6d3f);
+            box-shadow: 0 12px 26px rgba(25, 135, 84, 0.28);
+            transition: 0.25s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(25, 135, 84, 0.38);
+            color: #ffffff;
+            background: linear-gradient(135deg, #157347, #0b5a33);
+        }
+
+        .export-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+                
+
 
         @media (max-width: 950px) {
             .egat-header-inner {
@@ -513,6 +547,9 @@
             .hero-strip::after {
                 display: none;
             }
+        
+
+
         }
     </style>
 </head>
@@ -535,10 +572,16 @@
         </div>
 
         <nav class="egat-nav">
-            <a href="/form" class="egat-nav-link active">Home</a>
-            <a href="/export" class="egat-nav-link">Export CSV</a>
-            <a href="/logout" class="egat-logout">Logout</a>
-        </nav>
+    <a href="/form" class="egat-nav-link active">F03</a>
+    <a href="/f05" class="egat-nav-link">F05</a>
+
+    {% if session.role == "approver" %}
+    <a href="/approver" class="egat-nav-link">Approver</a>
+{% endif %}
+
+    <a href="/export" class="egat-nav-link">Export CSV</a>
+    <a href="/logout" class="egat-logout">Logout</a>
+</nav>
     </div>
 </header>
 
@@ -583,26 +626,45 @@
                     <div class="section-title">สถานที่ทำการ</div>
 
                     <form method="GET" action="/form">
-                        <select name="unit_id" class="form-select" onchange="this.form.submit()">
-                            <option value="">-- เลือกสถานที่ --</option>
 
-                            {% for unit in units %}
-                                <option value="{{ unit.id }}"
-                                    {% if selected_unit_id and selected_unit_id|int == unit.id %}
-                                        selected
-                                    {% endif %}
-                                >
-                                    {{ unit.unit_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </form>
+    {% if session.role == "admin" %}
+        <select name="unit_id" class="form-select" onchange="this.form.submit()">
+            <option value="">-- เลือกสถานที่ --</option>
+
+            {% for unit in units %}
+                <option value="{{ unit.id }}"
+                    {% if selected_unit_id and selected_unit_id|int == unit.id %}
+                        selected
+                    {% endif %}
+                >
+                    {{ unit.unit_name }}
+                </option>
+            {% endfor %}
+        </select>
+    {% else %}
+        <select class="form-select" disabled>
+            {% for unit in units %}
+                <option selected>{{ unit.unit_name }}</option>
+            {% endfor %}
+        </select>
+
+        {% if units %}
+            <input type="hidden" name="unit_id" value="{{ units[0].id }}">
+        {% endif %}
+    {% endif %}
+
+</form>
                 </div>
 
                 <div class="col-md-6">
                     <div class="status-box">
                         <strong>Authentication Status:</strong> Verified User<br>
-                        <strong>Permission Level:</strong> {{ role }}
+                        <strong>Permission Level:</strong> {{ role }}<br>
+{% if session.role == "admin" %}
+    <strong>Access Scope:</strong> All power plants
+{% else %}
+    <strong>Access Scope:</strong> {{ units[0].unit_name if units else '-' }}
+{% endif %}
                     </div>
                 </div>
             </div>
@@ -616,6 +678,17 @@
 
         <div class="evaluator-box">
             <h5 class="evaluator-title">Assessment Information</h5>
+
+            {% if selected_unit_id and records %}
+<div class="export-action">
+    <a href="/f03/report/{{ selected_unit_id }}"
+       target="_blank"
+       class="export-btn">
+        <span class="export-icon">📄</span>
+        <span>Export F03 Report (PDF)</span>
+    </a>
+</div>
+{% endif %}
 
             <div class="row g-4">
                 <div class="col-md-6">

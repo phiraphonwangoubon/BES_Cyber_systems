@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>F05 Assessment Form EGAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #061b78;
+            --deep-blue: #031052;
+            --royal-blue: #12229d;
+            --gold: #ffc928;
+            --gold-soft: #fff3c4;
+            --card: #ffffff;
+            --border: #d8e0ec;
+            --text: #172033;
+            --muted: #667085;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(255, 201, 40, 0.20), transparent 28%),
+                radial-gradient(circle at 90% 12%, rgba(6, 27, 120, 0.14), transparent 34%),
+                linear-gradient(180deg, #f8faff 0%, #eef3f8 100%);
+            font-family: "Inter", "Noto Sans Thai", sans-serif;
+            color: var(--text);
+        }
+
+        .egat-header {
+            background: #ffffff;
+            border-bottom: 5px solid var(--gold);
+            box-shadow: 0 8px 28px rgba(6, 27, 120, 0.16);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .egat-header-inner {
+            max-width: 1420px;
+            margin: 0 auto;
+            padding: 16px 42px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
+
+        .egat-brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .egat-logo {
+            height: 62px;
+            width: auto;
+            display: block;
+        }
+
+        .egat-divider {
+            width: 1px;
+            height: 48px;
+            background: #d8e0ec;
+        }
+
+        .egat-title h3 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--primary-blue);
+        }
+
+        .egat-title span {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .egat-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .egat-nav-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 800;
+            padding: 10px 14px;
+            border-radius: 999px;
+            transition: 0.2s ease;
+        }
+
+        .egat-nav-link:hover,
+        .egat-nav-link.active {
+            background: var(--gold-soft);
+            color: var(--primary-blue);
+        }
+
+        .egat-logout {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary-blue), var(--royal-blue));
+            text-decoration: none;
+            font-weight: 800;
+            padding: 10px 18px;
+            border-radius: 999px;
+            box-shadow: 0 8px 18px rgba(6, 27, 120, 0.2);
+        }
+
+        .main-container {
+            max-width: 1220px;
+            margin: 34px auto;
+            padding: 0 24px;
+        }
+
+        .f05-hero {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(6,27,120,0.98), rgba(18,34,157,0.95)),
+                linear-gradient(135deg, #ffffff, #fff9e7);
+            border-radius: 28px;
+            padding: 36px 38px;
+            box-shadow: 0 24px 60px rgba(6,27,120,0.18);
+            margin-bottom: 26px;
+            color: #ffffff;
+        }
+
+        .f05-hero::before {
+            content: "";
+            position: absolute;
+            right: -90px;
+            top: -120px;
+            width: 310px;
+            height: 310px;
+            background: var(--gold);
+            border-radius: 48px;
+            transform: rotate(18deg);
+            opacity: 0.95;
+        }
+
+        .f05-hero::after {
+            content: "";
+            position: absolute;
+            right: 160px;
+            bottom: -150px;
+            width: 220px;
+            height: 220px;
+            background: rgba(255,255,255,0.11);
+            border-radius: 50%;
+        }
+
+        .f05-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 820px;
+        }
+
+        .f05-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.24);
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 12px;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+        }
+
+        .f05-hero h4 {
+            font-size: 29px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .f05-hero p {
+            margin: 0;
+            color: rgba(255,255,255,0.84);
+            line-height: 1.8;
+        }
+
+        .form-shell {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .side-panel {
+            background: rgba(255,255,255,0.96);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 18px 48px rgba(15,23,42,0.08);
+            overflow: hidden;
+            position: sticky;
+            top: 118px;
+        }
+
+        .side-panel-header {
+            padding: 22px 24px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .side-panel-header h5 {
+            margin: 0;
+            color: var(--primary-blue);
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .side-panel-body {
+            padding: 22px 24px;
+        }
+
+        .section-title {
+            color: #344054;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 9px;
+        }
+
+        .form-select,
+        .fancy-input,
+        .fancy-textarea {
+            border-radius: 14px;
+            padding: 13px 15px;
+            border: 1px solid #cfd8e6;
+            font-weight: 600;
+            transition: 0.2s ease;
+            background: #ffffff;
+        }
+
+        .form-select:focus,
+        .fancy-input:focus,
+        .fancy-textarea:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(6,27,120,0.12);
+        }
+
+        .mini-info {
+            margin-top: 18px;
+            background: #fff9e7;
+            border: 1px solid #f2d47b;
+            border-left: 6px solid var(--gold);
+            border-radius: 16px;
+            padding: 14px 16px;
+            color: #6b4b00;
+            font-size: 13px;
+            line-height: 1.7;
+            font-weight: 700;
+        }
+
+        .content-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 20px 54px rgba(15,23,42,0.09);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 24px 30px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            position: relative;
+        }
+
+        .panel-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 7px;
+            background: linear-gradient(180deg, var(--gold), var(--primary-blue));
+        }
+
+        .panel-header h5 {
+            margin: 0;
+            color: var(--primary-blue);
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .panel-header small {
+            color: var(--muted);
+        }
+
+        .panel-body {
+            padding: 28px 30px;
+        }
+
+        .fancy-label {
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 7px;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 18px;
+            border: 1px solid #dbe3ef;
+            box-shadow: 0 12px 32px rgba(15,23,42,0.06);
+        }
+
+        table {
+            margin-bottom: 0 !important;
+            background: white;
+        }
+
+        thead th {
+            background: linear-gradient(180deg, var(--primary-blue), var(--deep-blue)) !important;
+            color: white !important;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 17px 12px !important;
+            border-color: rgba(255,255,255,0.18) !important;
+        }
+
+        tbody td {
+            vertical-align: middle;
+            font-size: 14px;
+            padding: 16px 14px !important;
+            border-color: #e1e8f0 !important;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9fbff;
+        }
+
+        tbody tr:hover {
+            background: #fff7db;
+        }
+
+        .custom-check {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            border: 2px solid #b7c3d0;
+            border-radius: 7px;
+        }
+
+        .custom-check:checked {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .signature-card {
+            background: #ffffff;
+            border: 1px dashed #b8c4d6;
+            border-radius: 18px;
+            padding: 22px;
+        }
+
+        .btn-official {
+            background: linear-gradient(135deg, var(--primary-blue), var(--royal-blue));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 13px 30px;
+            font-weight: 900;
+            box-shadow: 0 14px 28px rgba(6,27,120,0.22);
+        }
+
+        .btn-official:hover {
+            background: linear-gradient(135deg, #071f8c, #182fc7);
+            color: white;
+        }
+
+        .save-section {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #e5eaf2;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .notice {
+            background: #fff9e7;
+            border: 1px solid #f2d47b;
+            border-left: 6px solid var(--gold);
+            color: #6b4b00;
+            border-radius: 18px;
+            padding: 18px 22px;
+            font-weight: 700;
+            line-height: 1.9;
+        }
+
+        .export-action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 24px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background: linear-gradient(135deg, #198754, #0f6d3f);
+            box-shadow: 0 12px 26px rgba(25, 135, 84, 0.28);
+            transition: 0.25s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(25, 135, 84, 0.38);
+            color: #ffffff;
+            background: linear-gradient(135deg, #157347, #0b5a33);
+        }
+
+        .export-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .footer-note {
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+            padding: 18px 0 28px;
+        }
+
+        @media (max-width: 1000px) {
+            .form-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+                position: static;
+            }
+
+            .egat-header-inner {
+                padding: 14px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .egat-logo {
+                height: 52px;
+            }
+
+            .egat-divider {
+                display: none;
+            }
+
+            .egat-title h3 {
+                font-size: 18px;
+            }
+
+            .f05-hero::before,
+            .f05-hero::after {
+                display: none;
+            }
+
+            .export-action {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="egat-header">
+    <div class="egat-header-inner">
+        <div class="egat-brand">
+            <img src="https://energysolutions.egat.co.th/images/SES-Photos/100-Home/105-Logo/EGAT-01.png"
+                 alt="EGAT Logo"
+                 class="egat-logo">
+
+            <div class="egat-divider"></div>
+
+            <div class="egat-title">
+                <h3>Electricity Generating Authority of Thailand</h3>
+                <span>มาตรฐานความมั่นคงปลอดภัยระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า กฟผ.</span>
+            </div>
+        </div>
+
+        <nav class="egat-nav">
+            <a href="/form" class="egat-nav-link">F03</a>
+            <a href="/f05" class="egat-nav-link active">F05</a>
+
+            {% if session.role == "approver" %}
+                <a href="/approver" class="egat-nav-link">Approver</a>
+            {% endif %}
+
+            <a href="/export" class="egat-nav-link">Export CSV</a>
+            <a href="/logout" class="egat-logout">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main-container">
+
+    <section class="f05-hero">
+        <div class="f05-hero-content">
+            <div class="f05-badge">F05 · CIP-002 Assessment Form</div>
+            <h4>แบบฟอร์มทบทวนการระบุสินทรัพย์และระบบ BES Cyber System</h4>
+            <p>
+                แบบฟอร์มสำหรับบันทึกผลการทบทวนการระบุสินทรัพย์ กลุ่มทรัพย์สิน และระบบที่เกี่ยวข้องกับ BES Cyber System
+                โดยแยกออกจากหน้า Checklist เพื่อให้เหมาะกับการใช้งานในรูปแบบเอกสารและการอนุมัติภายในองค์กร
+            </p>
+        </div>
+    </section>
+
+    <div class="form-shell">
+
+        <aside class="side-panel">
+            <div class="side-panel-header">
+                <h5>F05 Navigation</h5>
+            </div>
+
+            <div class="side-panel-body">
+
+                <div class="mini-info mb-3">
+                    👤 {{ session.username }} ({{ session.role }})<br>
+
+                    {% if session.role != "admin" %}
+                        🏭 หน่วยงานของคุณ: {{ units[0].unit_name if units else '-' }}
+                    {% endif %}
+                </div>
+
+                <div class="section-title">สถานที่ทำการ</div>
+
+                <form method="GET" action="/f05">
+
+                    {% if session.role == "admin" %}
+                        <select name="unit_id" class="form-select" onchange="this.form.submit()">
+                            <option value="">-- เลือกสถานที่ --</option>
+
+                            {% for unit in units %}
+                                <option value="{{ unit.id }}"
+                                    {% if selected_unit_id and selected_unit_id|int == unit.id %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ unit.unit_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                    {% else %}
+                        <select class="form-select" disabled>
+                            {% for unit in units %}
+                                <option selected>{{ unit.unit_name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        {% if units %}
+                            <input type="hidden" name="unit_id" value="{{ units[0].id }}">
+                        {% endif %}
+                    {% endif %}
+                </form>
+
+                <div class="mini-info">
+                    {% if session.role == "admin" %}
+                        คุณสามารถเลือกดูและแก้ไขข้อมูลได้ทุกโรงไฟฟ้า
+                    {% else %}
+                        ระบบจำกัดสิทธิ์ให้คุณเข้าถึงเฉพาะโรงไฟฟ้าของคุณเท่านั้น
+                    {% endif %}
+                </div>
+
+            </div>
+        </aside>
+
+        <section class="content-stack">
+
+            {% if selected_unit_id %}
+
+                {% if record %}
+                    <div class="notice mb-4">
+                        <strong>สถานะเอกสาร F05:</strong>
+
+                        {% if record.approval_status == "pending" %}
+                            <span class="badge bg-warning text-dark">รออนุมัติ</span>
+
+                        {% elif record.approval_status == "approved" %}
+                            <span class="badge bg-success">ผ่านการอนุมัติ</span>
+
+                        {% elif record.approval_status == "rejected" %}
+                            <span class="badge bg-danger">ไม่ผ่านการอนุมัติ</span>
+
+                        {% else %}
+                            <span class="badge bg-secondary">ยังไม่มีสถานะ</span>
+                        {% endif %}
+
+                        {% if record.approved_at %}
+                            <br>
+                            <strong>เวลาที่ประเมิน:</strong> {{ record.approved_at_th or record.approved_at }}
+                        {% endif %}
+
+                        {% if record.approval_evaluator_name %}
+                            <br>
+                            <strong>ชื่อผู้ประเมิน:</strong> {{ record.approval_evaluator_name }}
+                        {% endif %}
+
+                        {% if record.approval_comment %}
+                            <br>
+                            <strong>หมายเหตุผู้อนุมัติ:</strong> {{ record.approval_comment }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if record and record.approval_status in ["approved", "rejected"] %}
+                    <div class="export-action">
+                        <a href="/f05/report/{{ record.unit_id }}"
+                           target="_blank"
+                           class="export-btn">
+                            <span class="export-icon">📄</span>
+                            <span>Export F05 Report (PDF)</span>
+                        </a>
+                    </div>
+                {% endif %}
+
+                <form method="POST" id="f05Form">
+                    <input type="hidden" name="unit_id" value="{{ selected_unit_id }}">
+
+                    <section class="panel mt-4">
+                        <div class="panel-header">
+                            <h5>1. การทบทวนการระบุสินทรัพย์</h5>
+                            <small>ทำเครื่องหมายในรายการที่ต้องปรับปรุงหรือเกี่ยวข้องกับการทบทวน</small>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="table-wrapper">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" style="width: 40%;">หัวข้อ</th>
+                                            <th rowspan="2" style="width: 15%;">แบบฟอร์ม</th>
+                                            <th rowspan="2" style="width: 15%;">ปรับปรุง</th>
+                                            <th colspan="2" style="width: 30%;">เลขที่แบบฟอร์ม</th>
+                                        </tr>
+                                        <tr>
+                                            <th>เดิม</th>
+                                            <th>ใหม่</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td>1. การระบุการบังคับใช้ (Applicability)</td>
+                                            <td class="text-center fw-bold">CIP-002-F01</td>
+                                            <td class="text-center">
+                                                <input type="checkbox"
+                                                       class="form-check-input custom-check"
+                                                       name="applicability"
+                                                       {% if record and record.applicability %}checked{% endif %}>
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_old_1"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่เดิม"
+                                                       value="{{ record.form_old_1 if record else '' }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_new_1"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่ใหม่"
+                                                       value="{{ record.form_new_1 if record else '' }}">
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2. การพิจารณา Assets แต่ละกลุ่ม (Considers Each of Assets)</td>
+                                            <td class="text-center fw-bold">CIP-002-F02</td>
+                                            <td class="text-center">
+                                                <input type="checkbox"
+                                                       class="form-check-input custom-check"
+                                                       name="asset_consideration"
+                                                       {% if record and record.asset_consideration %}checked{% endif %}>
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_old_2"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่เดิม"
+                                                       value="{{ record.form_old_2 if record else '' }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_new_2"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่ใหม่"
+                                                       value="{{ record.form_new_2 if record else '' }}">
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>3. การระบุระบบที่เป็น BES Cyber System</td>
+                                            <td class="text-center fw-bold">CIP-002-F03</td>
+                                            <td class="text-center">
+                                                <input type="checkbox"
+                                                       class="form-check-input custom-check"
+                                                       name="bes_identification"
+                                                       {% if record and record.bes_identification %}checked{% endif %}>
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_old_3"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่เดิม"
+                                                       value="{{ record.form_old_3 if record else '' }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_new_3"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่ใหม่"
+                                                       value="{{ record.form_new_3 if record else '' }}">
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>4. การระบุสินทรัพย์ (Asset Identify)</td>
+                                            <td class="text-center fw-bold">CIP-002-F04</td>
+                                            <td class="text-center">
+                                                <input type="checkbox"
+                                                       class="form-check-input custom-check"
+                                                       name="asset_identification"
+                                                       {% if record and record.asset_identification %}checked{% endif %}>
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_old_4"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่เดิม"
+                                                       value="{{ record.form_old_4 if record else '' }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="text"
+                                                       name="form_new_4"
+                                                       class="form-control fancy-input"
+                                                       placeholder="เลขที่ใหม่"
+                                                       value="{{ record.form_new_4 if record else '' }}">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="panel mt-4">
+                        <div class="panel-header">
+                            <h5>2. รายละเอียดการปรับปรุง</h5>
+                            <small>ระบุรายละเอียดเพิ่มเติมสำหรับการดำเนินการหรือการปรับปรุง</small>
+                        </div>
+
+                        <div class="panel-body">
+                            <textarea name="improvement_detail"
+                                      class="form-control fancy-textarea"
+                                      rows="6"
+                                      placeholder="กรอกรายละเอียดการปรับปรุง...">{{ record.improvement_detail if record else '' }}</textarea>
+                        </div>
+                    </section>
+
+                    <section class="panel mt-4">
+                        <div class="panel-header">
+                            <h5>3. ผู้ปฏิบัติงาน</h5>
+                            <small>ระบุชื่อผู้ปฏิบัติงานและวันที่ดำเนินการสำหรับแบบฟอร์มนี้</small>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="signature-card">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="fancy-label">ผู้ปฏิบัติงาน</label>
+                                        <input type="text"
+                                               name="operator_name"
+                                               class="form-control fancy-input"
+                                               value="{{ record.operator_name if record else '' }}"
+                                               placeholder="กรอกชื่อผู้ปฏิบัติงาน"
+                                               required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="fancy-label">วันที่ประเมิน / Assessment Date</label>
+                                        <input type="date"
+                                               name="assessment_date"
+                                               class="form-control fancy-input"
+                                               value="{{ record.assessment_date if record else '' }}"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="save-section">
+                                <button type="submit" class="btn btn-official">
+                                    Save F05 Assessment
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+
+            {% else %}
+
+                <div class="notice">
+                    Please select a department before entering F05 assessment information.
+                </div>
+
+            {% endif %}
+
+        </section>
+    </div>
+
+    <div class="footer-note">
+        Electricity Generating Authority of Thailand · Authorized Use Only
+    </div>
+
+</main>
+
+</body>
+</html>
