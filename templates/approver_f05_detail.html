@@ -15,7 +15,6 @@
     --royal-blue:#12229d;
     --gold:#ffc928;
     --gold-soft:#fff5cf;
-    --bg:#f4f7fb;
     --card:#ffffff;
     --border:#d8e0ec;
     --text:#172033;
@@ -321,6 +320,13 @@ body{
     font-weight:900;
 }
 
+.btn-approve:hover,
+.btn-reject:hover{
+    color:white;
+    transform:translateY(-1px);
+    box-shadow:0 10px 22px rgba(15,23,42,0.18);
+}
+
 .btn-back{
     color:var(--blue);
     background:#ffffff;
@@ -331,11 +337,50 @@ body{
     text-decoration:none;
 }
 
+.btn-back:hover{
+    background:var(--gold-soft);
+    color:var(--blue);
+}
+
+.alert-done{
+    background:#f8fbff;
+    border:1px solid #dbe3ef;
+    border-left:6px solid var(--blue);
+    border-radius:18px;
+    padding:18px 20px;
+    color:var(--blue);
+    font-weight:800;
+}
+
 .footer-note{
     color:var(--muted);
     text-align:center;
     font-size:12px;
     padding:22px 0 30px;
+}
+
+/* SweetAlert custom */
+.swal2-popup{
+    border-radius:28px !important;
+    font-family:"Inter","Noto Sans Thai",sans-serif !important;
+    padding:28px !important;
+}
+
+.swal2-title{
+    color:var(--blue) !important;
+    font-weight:900 !important;
+}
+
+.swal2-html-container{
+    color:#475467 !important;
+    font-weight:600 !important;
+}
+
+.swal2-confirm,
+.swal2-cancel{
+    border-radius:999px !important;
+    padding:12px 26px !important;
+    font-weight:900 !important;
 }
 
 @media(max-width:950px){
@@ -385,13 +430,14 @@ body{
             <span class="egat-user">
                 {{ session.username }} / {{ session.role }}
             </span>
-                {% if session.role != "approver" %}
+
+            {% if session.role != "approver" %}
                 <a href="/form" class="nav-btn">BES</a>
                 <a href="/f05" class="nav-btn">F05</a>
             {% endif %}
+
             <a href="/approver" class="nav-btn">F05</a>
             <a href="/logout" class="logout-btn">LOGOUT</a>
-        
         </nav>
     </div>
 </header>
@@ -528,60 +574,59 @@ body{
 
         <div class="panel-body">
 
-    {% if record.approval_status == "pending" %}
+            {% if record.approval_status == "pending" %}
 
-    <form method="POST"
-          action="/approver/f05/{{ record.unit_id }}/decision"
-          onsubmit="this.querySelectorAll('button').forEach(b=>b.disabled=true)">
+            <form method="POST"
+                  action="/approver/f05/{{ record.unit_id }}/decision"
+                  id="approvalForm">
 
-        <label class="form-label">
-            ชื่อผู้ประเมิน <span class="text-danger">*</span>
-        </label>
+                <input type="hidden" name="decision" id="decisionInput">
 
-        <input type="text"
-               name="approval_evaluator_name"
-               class="form-control mb-3"
-               required
-               placeholder="กรอกชื่อผู้ประเมิน"
-               value="{{ record.approval_evaluator_name or '' }}">
+                <label class="form-label">
+                    ชื่อผู้ประเมิน <span class="text-danger">*</span>
+                </label>
 
-        <label class="form-label">หมายเหตุจากผู้อนุมัติ</label>
+                <input type="text"
+                       name="approval_evaluator_name"
+                       id="approvalEvaluatorName"
+                       class="form-control mb-3"
+                       required
+                       placeholder="กรอกชื่อผู้ประเมิน"
+                       value="{{ record.approval_evaluator_name or '' }}">
 
-        <textarea name="approval_comment"
-                  class="form-control mb-3"
-                  rows="4"
-                  placeholder="กรอกหมายเหตุ เช่น ผ่านการตรวจสอบแล้ว / ต้องแก้ไขข้อมูลเพิ่มเติม">{{ record.approval_comment or '' }}</textarea>
+                <label class="form-label">หมายเหตุจากผู้อนุมัติ</label>
 
-        <div class="d-flex gap-2 justify-content-end flex-wrap">
+                <textarea name="approval_comment"
+                          class="form-control mb-3"
+                          rows="4"
+                          placeholder="กรอกหมายเหตุ เช่น ผ่านการตรวจสอบแล้ว / ต้องแก้ไขข้อมูลเพิ่มเติม">{{ record.approval_comment or '' }}</textarea>
 
-            <button type="submit"
-                    name="decision"
-                    value="rejected"
-                    class="btn btn-reject"
-                    onclick="return confirm('ยืนยันการไม่อนุมัติเอกสารนี้ใช่หรือไม่?')">
-                ไม่ผ่านการอนุมัติ
-            </button>
+                <div class="d-flex gap-2 justify-content-end flex-wrap">
 
-            <button type="submit"
-                    name="decision"
-                    value="approved"
-                    class="btn btn-approve"
-                    onclick="return confirm('ยืนยันการอนุมัติเอกสารนี้ใช่หรือไม่?')">
-                ผ่านการอนุมัติ
-            </button>
+                    <button type="button"
+                            class="btn btn-reject"
+                            onclick="confirmDecision('rejected')">
+                        ไม่ผ่านการอนุมัติ
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-approve"
+                            onclick="confirmDecision('approved')">
+                        ผ่านการอนุมัติ
+                    </button>
+
+                </div>
+            </form>
+
+            {% else %}
+
+            <div class="alert-done mb-0">
+                เอกสารนี้ถูกดำเนินการแล้ว ไม่สามารถอนุมัติหรือแก้ไขซ้ำได้
+            </div>
+
+            {% endif %}
 
         </div>
-    </form>
-
-    {% else %}
-
-    <div class="alert alert-info mb-0">
-        เอกสารนี้ถูกดำเนินการแล้ว ไม่สามารถอนุมัติหรือแก้ไขซ้ำได้
-    </div>
-
-    {% endif %}
-
-</div>
     </section>
 
     <section class="panel">
@@ -635,6 +680,14 @@ body{
                             <td>{{ h.comment or '-' }}</td>
                         </tr>
                         {% endfor %}
+
+                        {% if not history %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                ยังไม่มีประวัติการดำเนินการ
+                            </td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -650,6 +703,64 @@ body{
     </div>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+function confirmDecision(decision) {
+    const form = document.getElementById("approvalForm");
+    const decisionInput = document.getElementById("decisionInput");
+    const evaluatorInput = document.getElementById("approvalEvaluatorName");
+
+    const evaluatorName = evaluatorInput.value.trim();
+
+    if (!evaluatorName) {
+        Swal.fire({
+            icon: "warning",
+            title: "กรุณากรอกชื่อผู้ประเมิน",
+            text: "ต้องกรอกชื่อผู้ประเมินก่อนบันทึกผลการพิจารณา",
+            confirmButtonText: "ตกลง",
+            confirmButtonColor: "#061b78"
+        });
+
+        evaluatorInput.focus();
+        return;
+    }
+
+    const isApproved = decision === "approved";
+
+    Swal.fire({
+        icon: isApproved ? "success" : "warning",
+        title: isApproved ? "ยืนยันการอนุมัติเอกสาร" : "ยืนยันการไม่อนุมัติเอกสาร",
+        html: isApproved
+            ? "คุณต้องการอนุมัติเอกสาร F05 นี้ใช่หรือไม่?"
+            : "คุณต้องการไม่อนุมัติเอกสาร F05 นี้ใช่หรือไม่?",
+        showCancelButton: true,
+        confirmButtonText: isApproved ? "อนุมัติเอกสาร" : "ไม่อนุมัติเอกสาร",
+        cancelButtonText: "ยกเลิก",
+        confirmButtonColor: isApproved ? "#198754" : "#dc3545",
+        cancelButtonColor: "#667085",
+        reverseButtons: true,
+        focusCancel: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            decisionInput.value = decision;
+
+            Swal.fire({
+                title: "กำลังบันทึกข้อมูล...",
+                text: "กรุณารอสักครู่",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            form.submit();
+        }
+    });
+}
+</script>
 
 </body>
 </html>
