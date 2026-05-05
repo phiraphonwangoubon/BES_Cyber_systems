@@ -1,53 +1,370 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <title>Main Menu</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>WN-CIP-002 Menu | EGAT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --blue:#061b78;
+    --deep-blue:#031052;
+    --royal-blue:#12229d;
+    --gold:#ffc928;
+    --gold-soft:#fff6d8;
+    --border:#d8e0ec;
+    --text:#172033;
+    --muted:#667085;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 10% 8%, rgba(255,201,40,0.22), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(6,27,120,0.16), transparent 34%),
+        linear-gradient(180deg,#f8faff 0%,#eef3f8 100%);
+    font-family:"Inter","Noto Sans Thai",sans-serif;
+    color:var(--text);
+}
+
+.egat-header{
+    background:#fff;
+    border-bottom:5px solid var(--gold);
+    box-shadow:0 8px 28px rgba(6,27,120,0.16);
+}
+
+.egat-header-inner{
+    max-width:1420px;
+    margin:auto;
+    padding:16px 42px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+}
+
+.egat-brand{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.egat-logo{
+    height:62px;
+}
+
+.egat-divider{
+    width:1px;
+    height:48px;
+    background:#d8e0ec;
+}
+
+.egat-title h3{
+    margin:0;
+    color:var(--blue);
+    font-weight:900;
+    font-size:21px;
+}
+
+.egat-title span{
+    color:var(--muted);
+    font-weight:600;
+    font-size:13px;
+}
+
+.user-pill{
+    color:var(--blue);
+    font-weight:800;
+    background:#f8fbff;
+    border:1px solid var(--border);
+    padding:10px 16px;
+    border-radius:999px;
+}
+
+.logout-btn{
+    color:#fff;
+    text-decoration:none;
+    background:linear-gradient(135deg,var(--blue),var(--royal-blue));
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:900;
+    box-shadow:0 8px 18px rgba(6,27,120,0.22);
+}
+
+.main-container{
+    max-width:1180px;
+    margin:38px auto;
+    padding:0 24px;
+}
+
+.hero{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,rgba(6,27,120,0.98),rgba(18,34,157,0.95));
+    color:#fff;
+    border-radius:30px;
+    padding:42px;
+    box-shadow:0 24px 60px rgba(6,27,120,0.2);
+    margin-bottom:28px;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    right:-100px;
+    top:-130px;
+    width:340px;
+    height:340px;
+    background:var(--gold);
+    border-radius:52px;
+    transform:rotate(18deg);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:860px;
+}
+
+.hero-badge{
+    display:inline-block;
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.25);
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.7px;
+    margin-bottom:14px;
+}
+
+.hero h1{
+    font-size:34px;
+    font-weight:900;
+    margin-bottom:12px;
+}
+
+.hero p{
+    color:rgba(255,255,255,0.86);
+    line-height:1.8;
+    margin:0;
+}
+
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+}
+
+.menu-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:26px;
+    padding:30px;
+    box-shadow:0 20px 54px rgba(15,23,42,0.09);
+    position:relative;
+    overflow:hidden;
+    min-height:280px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    transition:.25s ease;
+}
+
+.menu-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 28px 70px rgba(6,27,120,0.16);
+}
+
+.menu-card::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:8px;
+    background:linear-gradient(180deg,var(--gold),var(--blue));
+}
+
+.menu-icon{
+    width:62px;
+    height:62px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    background:var(--gold-soft);
+    margin-bottom:18px;
+}
+
+.menu-label{
+    color:var(--muted);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.menu-card h2{
+    color:var(--blue);
+    font-size:24px;
+    font-weight:900;
+    margin-bottom:12px;
+}
+
+.menu-card p{
+    color:var(--muted);
+    line-height:1.8;
+    margin-bottom:24px;
+}
+
+.menu-btn{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    color:#fff;
+    background:linear-gradient(135deg,var(--blue),var(--royal-blue));
+    border-radius:999px;
+    padding:13px 24px;
+    font-weight:900;
+    box-shadow:0 12px 26px rgba(6,27,120,0.24);
+}
+
+.menu-btn:hover{
+    color:#fff;
+    background:linear-gradient(135deg,#071f8c,#182fc7);
+}
+
+.footer-note{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    padding:28px 0;
+}
+
+@media(max-width:900px){
+    .egat-header-inner{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:14px 22px;
+    }
+
+    .egat-divider{
+        display:none;
+    }
+
+    .egat-logo{
+        height:52px;
+    }
+
+    .hero::before{
+        display:none;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .menu-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
 </head>
 
-<body style="background:#f5f7fb;">
+<body>
 
-<div class="container text-center mt-5">
+<header class="egat-header">
+    <div class="egat-header-inner">
+        <div class="egat-brand">
+            <img src="https://energysolutions.egat.co.th/images/SES-Photos/100-Home/105-Logo/EGAT-01.png"
+                 class="egat-logo"
+                 alt="EGAT Logo">
 
-    <h2 class="mb-3">📊 Cyber Security Assessment System</h2>
-    <p class="text-muted">เลือกเมนูที่ต้องการใช้งาน</p>
+            <div class="egat-divider"></div>
 
-    <div class="row justify-content-center mt-4">
-
-        <!-- F03 -->
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-lg border-0">
-                <div class="card-body">
-                    <h4>📋 F03</h4>
-                    <p class="text-muted">BES Identification</p>
-                    <a href="/form" class="btn btn-primary w-100">
-                        ไปยัง F03
-                    </a>
-                </div>
+            <div class="egat-title">
+                <h3>Electricity Generating Authority of Thailand</h3>
+                <span>มาตรฐานความมั่นคงปลอดภัยระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า กฟผ.</span>
             </div>
         </div>
 
-        <!-- F05 -->
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-lg border-0">
-                <div class="card-body">
-                    <h4>🧾 F05</h4>
-                    <p class="text-muted">Assessment Form</p>
-                    <a href="/f05" class="btn btn-success w-100">
-                        ไปยัง F05
-                    </a>
-                </div>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="user-pill">
+                {{ session.username }} / {{ session.role }}
+            </span>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</header>
+
+<main class="main-container">
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">WN-CIP-002</div>
+
+            <h1>การจำแนกประเภทระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า</h1>
+
+            <p>
+                เลือกแบบฟอร์มที่ต้องการดำเนินการภายใต้มาตรฐานความมั่นคงปลอดภัย
+                ระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้า กฟผ.
+            </p>
+        </div>
+    </section>
+
+    <section class="menu-grid">
+
+        <div class="menu-card">
+            <div>
+                <div class="menu-icon">🖥️</div>
+                <div class="menu-label">Form F03 · Requirement R1</div>
+
+                <h2>การระบุ (Identify) ระบบที่เป็น BES Cyber System (R1)</h2>
+
+                <p>
+                    ใช้สำหรับระบุและบันทึกว่าระบบคอมพิวเตอร์ควบคุมผลิตไฟฟ้าใด
+                    เข้าข่ายเป็น BES Cyber System ตามรายการระบบของแต่ละหน่วยงาน
+                </p>
             </div>
+
+            <a href="/form" class="menu-btn">
+                เข้าสู่ฟอร์ม F03
+            </a>
         </div>
 
+        <div class="menu-card">
+            <div>
+                <div class="menu-icon">📄</div>
+                <div class="menu-label">Form F05 · Review</div>
+
+                <h2>การทบทวนการระบุสินทรัพย์</h2>
+
+                <p>
+                    Review the identifications of Assets ใช้สำหรับทบทวนการระบุสินทรัพย์
+                    บันทึกรายละเอียดการปรับปรุง และส่งเอกสารเข้าสู่กระบวนการอนุมัติ
+                </p>
+            </div>
+
+            <a href="/f05" class="menu-btn">
+                เข้าสู่ฟอร์ม F05
+            </a>
+        </div>
+
+    </section>
+
+    <div class="footer-note">
+        Electricity Generating Authority of Thailand · Authorized Use Only
     </div>
 
-    <div class="mt-4">
-        <a href="/logout" class="btn btn-outline-danger">Logout</a>
-    </div>
-
-</div>
+</main>
 
 </body>
 </html>

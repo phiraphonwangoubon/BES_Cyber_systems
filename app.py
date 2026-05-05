@@ -129,12 +129,21 @@ def format_thai_datetime(dt):
 
     return thai_time.strftime(f"%d/%m/{thai_year} %H:%M:%S")
 
+@app.route("/menu")
+def menu():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session.get("role") == "approver":
+        return redirect("/approver")
+
+    return render_template("menu.html", session=session)
 
 @app.route("/")
 def index():
     if "user_id" not in session:
         return redirect("/login")
-    return redirect("/form")
+    return redirect("/menu")
 
 
 @app.route("/login", methods=["GET", "POST"])
