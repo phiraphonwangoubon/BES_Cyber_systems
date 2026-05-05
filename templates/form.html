@@ -660,11 +660,6 @@
                     <div class="status-box">
                         <strong>Authentication Status:</strong> Verified User<br>
                         <strong>Permission Level:</strong> {{ role }}<br>
-{% if session.role == "admin" %}
-    <strong>Access Scope:</strong> All power plants
-{% else %}
-    <strong>Access Scope:</strong> {{ units[0].unit_name if units else '-' }}
-{% endif %}
                     </div>
                 </div>
             </div>
