@@ -176,7 +176,7 @@ def login():
             if user["role"] == "approver":
                 return redirect("/approver")
 
-            return redirect("/form")
+            return redirect("/menu")
 
         write_audit_log(
             action="LOGIN_FAILED",
